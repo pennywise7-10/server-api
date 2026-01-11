@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Log Activity</title>
+    <style>
+        /* Copy CSS dari log.html sebelumnya */
+    </style>
+</head>
+<body>
+    <h1>Log Activity</h1>
+    <div id="logTable"></div>
+    
+    <script>
+        async function loadLogs() {
+            const response = await fetch('/api/logs');
+            const logs = await response.json();
+            
+            const logTable = document.getElementById('logTable');
+            
+            if (logs.length > 0) {
+                let html = `
+                    <table style="width:100%;border-collapse:collapse;background:#2c2f33;color:#f8f9fa;border-radius:8px;">
+                        <thead>
+                            <tr>
+                                <th style="padding:12px;background:#343a40;">Time</th>
+                                <th style="padding:12px;background:#343a40;">Action</th>
+                                <th style="padding:12px;background:#343a40;">API Key</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                logs.forEach(log => {
+                    html += `
+                        <tr style="background:#2e3236;">
+                            <td style="padding:12px;">${log.time}</td>
+                            <td style="padding:12px;">${log.action}</td>
+                            <td style="padding:12px;">${log.api_key}</td>
+                        </tr>
+                    `;
+                });
+                
+                html += '</tbody></table>';
+                logTable.innerHTML = html;
+            } else {
+                logTable.innerHTML = '<p>No logs available.</p>';
+            }
+        }
+        
+        loadLogs();
+    </script>
+</body>
+</html>
